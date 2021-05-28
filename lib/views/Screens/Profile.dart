@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+
 
   String Userid = FirebaseAuth.instance.currentUser.uid;
   String name = '';
@@ -50,13 +53,14 @@ class _UserProfileState extends State<UserProfile> {
                       child: ListView.builder(
                         itemBuilder: (context, index){
                           name = snapshot.data.docs[index]['Name'];
+
                           return Container(
                               child:  Column(
 
                                 children: [
 
                                   SizedBox(height: 20),
-                                 Container(
+                              /*   Container(
                                     alignment: Alignment.center,
                                     height: 90,
                                     width: 90,
@@ -66,7 +70,7 @@ class _UserProfileState extends State<UserProfile> {
                                     child: Image(
                                       height: 100,
                                       image: NetworkImage('https://lh3.googleusercontent.com/proxy/fypeH78ZD6u6TeBnByC8Pnr6L-AEgLtJ9oc3r-C8C6-fyrLPLpwn7f8O4CC87TYpemRZ8WGW-EH-2dag7AZiF1gkrYaetaH1EMzQtG1PZ-iKf0nWQ10kXtVT'),),
-                                  ),
+                                  ), */
                                   SizedBox(height: 20,),
                                   Container(
                                     padding: EdgeInsets.all(10),

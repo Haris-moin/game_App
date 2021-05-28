@@ -2,16 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_app/Model/Providers/auth_services_Provider.dart';
-import 'package:game_app/views/Screens/EditProfile.dart';
 import 'package:game_app/views/Screens/Home.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class OTPScreen extends StatefulWidget {
+  final String Email;
+  final String Password;
+  final String FirstName;
+  final String LastName;
+  final String Address;
   final String phone;
-   OTPScreen(this.phone);
+
+   OTPScreen(this.Email, this.Password, this.FirstName, this.LastName, this.Address, this.phone);
 
   @override
   _OTPScreenState createState() => _OTPScreenState();
@@ -19,10 +23,47 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
 
+  int finalDate ;
 
+  getCurrentDate(){
+
+    setState(() {
+
+      finalDate = DateTime.now().millisecondsSinceEpoch ;
+
+    });
+
+  }
+
+
+
+  Future<void> _SignUp(String email, String password,String FirstName ,String LastName ,String address,String phone,int Date,BuildContext context)
+  async {
+    auth_Services_Provider _auth_Provider = Provider.of<auth_Services_Provider>(context, listen: false);
+
+    try{
+      await   _auth_Provider.registerWithEmailPassword(email,password,FirstName,LastName,address,phone,Date).then((result) {
+        if (result != null) {
+
+          Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return Home();
+                }
+              ));
+        }
+        print(result);
+      }).catchError((error) {
+        print('Registration Error: $error');
+      });
+    }
+    catch(e)
+    {
+      print(e);
+    }
+  }
 
   final TextEditingController _pinPutController = TextEditingController();
-
   final FocusNode _pinPutFocusNode = FocusNode();
   String _verificationCode;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
@@ -53,13 +94,8 @@ class _OTPScreenState extends State<OTPScreen> {
               if(value!= null)
                 {
                   print('verified');
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return Home();
-                      },
-                    ),
-                  );
+
+                  _SignUp(widget.Email, widget.Password, widget.FirstName, widget.LastName, widget.Address, widget.phone, finalDate, context);
                 }
             });
           }
@@ -110,6 +146,7 @@ class _OTPScreenState extends State<OTPScreen> {
              ),
              child: Text('Get OTP',style: TextStyle(fontSize: 14.sp),),
              onPressed: () {
+               getCurrentDate();
                _verifyPhone();
              },
            ),
@@ -134,6 +171,7 @@ class _OTPScreenState extends State<OTPScreen> {
          if(value!=null)
            {
              print('Logged in');
+             _SignUp(widget.Email, widget.Password, widget.FirstName, widget.LastName, widget.Address, widget.phone, finalDate, context);
            }
          else{
            print('not get credential');

@@ -17,7 +17,36 @@ class _LoginState extends State<Login> {
 
   bool _obscureText = true;
 
+Future<bool> _OnBackPrssed(){
+  return showDialog(context: context, builder: (BuildContext context){
+    return AlertDialog(
+      title: Text('Are you sure'),
+      content: Text('You are going to exit this application'),
+      actions: [
+        ElevatedButton(
 
+          style: ElevatedButton.styleFrom(
+            primary: Colors.red,
+          ),
+          child: Text('no',),
+          onPressed: () {
+          Navigator.of(context).pop(false);
+          },
+        ),
+        ElevatedButton(
+
+          style: ElevatedButton.styleFrom(
+            primary: Colors.red,
+          ),
+          child: Text('yes',),
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ],
+    );
+  });
+}
   // Toggles the password show status
   void _toggle() {
     setState(() {
@@ -77,141 +106,144 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('Game'),backgroundColor: Colors.red,),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 8.h, bottom: 8.h),
-              child: Text(
-                'Sign In',
-                style: TextStyle(
-                    fontSize: 34.0,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 20),
-                child: TextField(
-                  focusNode: textFocusNodeEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  controller: textControllerEmail,
-                  autofocus: false,
-                  onChanged: (value) {
-                    setState(() {
-                      _isEditingEmail = true;
-                    });
-                  },
-                  onSubmitted: (value) {
-                    textFocusNodeEmail.unfocus();
-                    FocusScope.of(context).requestFocus(textFocusNodePassword);
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: "Email",
-                    fillColor: Colors.white,
-                    errorText: _isEditingEmail
-                        ? _validateEmail(textControllerEmail.text)
-                        : null,
-                    errorStyle: TextStyle(
-                      fontSize: 12,
-                      color: Colors.redAccent,
-                    ),
-                  ),
-                )),
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 20),
-                child: TextField(
-                  focusNode: textFocusNodePassword,
-
-                  textInputAction: TextInputAction.next,
-                  controller: textControllerPassword,
-                  autofocus: false,
-                  obscureText: _obscureText,
-
-                  onChanged: (value) {
-                    setState(() {
-                      _isEditingPassword = true;
-                    });
-                  },
-
-                  onSubmitted: (value) {
-                    textFocusNodePassword.unfocus();
-                  },
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-                      onPressed: (){
-                        _toggle();
-                      },
-                    ),
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-
-                    hintText: "Password",
-                    fillColor: Colors.white,
-                    errorText: _isEditingPassword
-                        ? _validatePassword(textControllerPassword.text)
-                        : null,
-                    errorStyle: TextStyle(
-                      fontSize: 12,
-                      color: Colors.redAccent,
-                    ),
-                  ),
-                )),
-
-            Container(
-              width: 50.w,
-              height: 5.h,
-              margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 50),
-              child:  ElevatedButton(
-
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
+      body:WillPopScope(
+        onWillPop: _OnBackPrssed,
+        child:  Container(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 8.h, bottom: 8.h),
+                child: Text(
+                  'Sign In',
+                  style: TextStyle(
+                      fontSize: 34.0,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w700),
                 ),
-                child: Text('Sign In',style: TextStyle(fontSize: 14.sp),),
-                onPressed: () {
-                  ValidateAlert(textControllerEmail.text, textControllerPassword.text, context);
-                },
               ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Text(
-                      'Don\'t have account?',
-                      style: TextStyle(
-                        fontSize:16.0,
+
+              Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 20),
+                  child: TextField(
+                    focusNode: textFocusNodeEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    controller: textControllerEmail,
+                    autofocus: false,
+                    onChanged: (value) {
+                      setState(() {
+                        _isEditingEmail = true;
+                      });
+                    },
+                    onSubmitted: (value) {
+                      textFocusNodeEmail.unfocus();
+                      FocusScope.of(context).requestFocus(textFocusNodePassword);
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                      hintText: "Email",
+                      fillColor: Colors.white,
+                      errorText: _isEditingEmail
+                          ? _validateEmail(textControllerEmail.text)
+                          : null,
+                      errorStyle: TextStyle(
+                        fontSize: 12,
+                        color: Colors.redAccent,
                       ),
                     ),
+                  )),
+              Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 20),
+                  child: TextField(
+                    focusNode: textFocusNodePassword,
+
+                    textInputAction: TextInputAction.next,
+                    controller: textControllerPassword,
+                    autofocus: false,
+                    obscureText: _obscureText,
+
+                    onChanged: (value) {
+                      setState(() {
+                        _isEditingPassword = true;
+                      });
+                    },
+
+                    onSubmitted: (value) {
+                      textFocusNodePassword.unfocus();
+                    },
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                        onPressed: (){
+                          _toggle();
+                        },
+                      ),
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+
+                      hintText: "Password",
+                      fillColor: Colors.white,
+                      errorText: _isEditingPassword
+                          ? _validatePassword(textControllerPassword.text)
+                          : null,
+                      errorStyle: TextStyle(
+                        fontSize: 12,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  )),
+
+              Container(
+                width: 50.w,
+                height: 5.h,
+                margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 50),
+                child:  ElevatedButton(
+
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
                   ),
-                  Container(
-                    margin: EdgeInsets.only(left: 2.0.w),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Registration()),
-                        );
-                      },
+                  child: Text('Sign In',style: TextStyle(fontSize: 14.sp),),
+                  onPressed: () {
+                    ValidateAlert(textControllerEmail.text, textControllerPassword.text, context);
+                  },
+                ),
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
                       child: Text(
-                        'Sign Up',
+                        'Don\'t have account?',
                         style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20.0,
+                          fontSize:16.0,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      margin: EdgeInsets.only(left: 2.0.w),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Registration()),
+                          );
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

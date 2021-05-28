@@ -24,7 +24,17 @@ class _paymentScreenState extends State<paymentScreen > {
   final String UserId = FirebaseAuth.instance.currentUser.uid;
 
   String finalDate = '';
+  int TicketId ;
 
+  getTicketID(){
+
+    setState(() {
+
+      TicketId = DateTime.now().millisecondsSinceEpoch ;
+
+    });
+
+  }
   getCurrentDate(){
 
     var date = new DateTime.now().toString();
@@ -137,7 +147,8 @@ class _paymentScreenState extends State<paymentScreen > {
                                {
 
                                  getCurrentDate();
-                                 _UploadTiket(widget.TNo1, widget.TNo2, widget.TNo3, widget.TNo4,widget.TNo5,TransactionIdController.text,UserId,widget.DrawerNo,finalDate,widget.name);
+                                 getTicketID();
+                                 _UploadTiket(widget.TNo1, widget.TNo2, widget.TNo3, widget.TNo4,widget.TNo5,TransactionIdController.text,UserId,widget.DrawerNo,finalDate,widget.name,TicketId);
 
 
                                }
@@ -194,12 +205,12 @@ class _paymentScreenState extends State<paymentScreen > {
       },
     );
   }
-  _UploadTiket(T1 ,T2 ,T3,T4,T5,TransId,UserId,DrawNo,Date,name)
-  {
-    print(name);
+  _UploadTiket(T1 ,T2 ,T3,T4,T5,TransId,UserId,DrawNo,Date,name,TicketId)
+ async {
+
     List<String> TicketNumbers= [T1,T2,T3,T4,T5];
-    FirebaseFirestore.instance.collection('Tickets').doc().set(
-        { 'UserId': UserId, 'Draw No' : DrawNo, "TicketNo": FieldValue.arrayUnion(TicketNumbers), 'Transaction Id': TransId, 'Date' : Date  , 'Name' : name , 'status' : 'pending'});
+   await FirebaseFirestore.instance.collection('Tickets').doc().set(
+        { 'UserId': UserId, 'Draw No' : DrawNo, "TicketNo": FieldValue.arrayUnion(TicketNumbers), 'Transaction Id': TransId, 'Date' : Date  , 'Name' : name , 'status' : 'pending','TicketID' : TicketId});
     PaymetAlert(context);
   }
 

@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:game_app/Model/Providers/auth_services_Provider.dart';
 import 'package:game_app/views/Screens/EditPassword.dart';
 import 'package:game_app/views/Screens/EditProfile.dart';
+import 'package:game_app/views/Screens/Editphone.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'AppDrawer.dart';
+import 'login.dart';
 
 class settings extends StatefulWidget {
   @override
@@ -13,7 +20,16 @@ class settings extends StatefulWidget {
 
 class _settingsState extends State<settings> {
 
-  int _value = 1;
+  Future<void> signOut(BuildContext context)
+  async{
+    auth_Services_Provider _auth_Provider = Provider.of<auth_Services_Provider>(context, listen: false);
+    _auth_Provider.signOut().then((value) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          Login()), (Route<dynamic> route) => false);
+    });
+
+  }
+
   String Name = FirebaseAuth.instance.currentUser.displayName;
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,7 @@ class _settingsState extends State<settings> {
                 SizedBox(height: 10,),
                 Container(
                   alignment: Alignment.center,
-                  child: Text('Persons name',style: TextStyle(fontSize: 18)),
+                  child: Text('setting',style: TextStyle(fontSize: 25)),
                 ),
                 SizedBox(height: 20,),
 
@@ -107,7 +123,7 @@ class _settingsState extends State<settings> {
                         ),
                         child: InkWell(
                           onTap: (){
-
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditPhone()));
                           },
                           child: Container(
                               padding: EdgeInsets.all(20),
@@ -147,8 +163,11 @@ class _settingsState extends State<settings> {
                             },
                           ),
                         ),
-                        onPressed: () {
-                          
+                        onPressed: () async{
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                          prefs.remove('email');
+                          signOut(context);
                         },
                         child: Text('Logout',style: TextStyle(color: Colors.white,fontSize: 18))
                     ),
@@ -161,5 +180,6 @@ class _settingsState extends State<settings> {
       ),
     );
   }
+
 
 }

@@ -23,6 +23,8 @@ dependencies:
   pinput: ^1.2.0
   ticket_card: ^0.2.0
   ticketview: ^1.0.0
+  firebase_messaging: ^10.0.0
+  flutter_local_notifications:
 
 
 dev_dependencies:

@@ -76,79 +76,81 @@ class _GameScreenState extends State<GameScreen> {
         title: Text('Bingo',),
         backgroundColor: Colors.red,
       ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 2.h,bottom: 2.h),
-              child: Center(
-                child: Text('BINGO',style: TextStyle(color: Colors.blue,fontSize: 25.sp,letterSpacing: 10,fontWeight: FontWeight.w800,)),
-              ),
-            ),
+      body: WillPopScope(
 
-            Container(
-                height: 72.h,
-                child:  GridView.count(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: ClampingScrollPhysics(),
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
-                    crossAxisCount: 5,
-                    children: _buttonCoorChange.map((MyButtonModal f) {
-                      return InkWell(
-                        child: Container(
-                            margin: EdgeInsets.only(top: 1.h,bottom: 1.h,left: 1.w, right: 1.5.w),
-                            decoration: BoxDecoration(
-                                color: f.changeButtonColor
-                                    ? Colors.blue
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(32),
+        child: Container(
+          child: ListView(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 2.h,bottom: 2.h),
+                child: Center(
+                  child: Text('BINGO',style: TextStyle(color: Colors.blue,fontSize: 25.sp,letterSpacing: 10,fontWeight: FontWeight.w800,)),
+                ),
+              ),
+
+              Container(
+                  height: 72.h,
+                  child:  GridView.count(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: ClampingScrollPhysics(),
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
+                      crossAxisCount: 5,
+                      children: _buttonCoorChange.map((MyButtonModal f) {
+                        return InkWell(
+                          child: Container(
+                              margin: EdgeInsets.only(top: 1.h,bottom: 1.h,left: 1.w, right: 1.5.w),
+                              decoration: BoxDecoration(
+                                  color: f.changeButtonColor
+                                      ? Colors.blue
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(32),
 
 //                          border: Border.all(color: Colors.blueGrey),
-                                boxShadow: [
+                                  boxShadow: [
 
-                                  BoxShadow(
-                                    color: Colors.blue,
-                                    blurRadius: 5,
-                                    offset: Offset(-1, -1),
-                                  ),]),
+                                    BoxShadow(
+                                      color: Colors.blue,
+                                      blurRadius: 5,
+                                      offset: Offset(-1, -1),
+                                    ),]),
 
-                            child: Center(
-                              child: Text(f.buttonText,style: TextStyle(
-                                fontSize: 25,
+                              child: Center(
+                                child: Text(f.buttonText,style: TextStyle(
+                                  fontSize: 25,
 
-                              ),
-                              ),
-                            )),
-                        onTap: () {
+                                ),
+                                ),
+                              )),
+                          onTap: () {
 
-                          setState(() {
-                            if(TicketNumbers.length<=5)
-                            {
-                              if(TicketNumbers.contains(f.buttonText))
+                            setState(() {
+                              if(TicketNumbers.length<=5)
                               {
-                                TicketNumbers.remove(f.buttonText);
-                                f.changeButtonColor = !f.changeButtonColor;
+                                if(TicketNumbers.contains(f.buttonText))
+                                {
+                                  TicketNumbers.remove(f.buttonText);
+                                  f.changeButtonColor = !f.changeButtonColor;
 
+                                }
+                                else if(TicketNumbers.length<5)
+                                {
+                                  f.changeButtonColor = !f.changeButtonColor;
+                                  TicketNumbers.add(f.buttonText);
+                                }
                               }
-                              else if(TicketNumbers.length<5)
-                              {
-                                f.changeButtonColor = !f.changeButtonColor;
-                                TicketNumbers.add(f.buttonText);
-                              }
-                            }
 
-                            print('setstate ${f.buttonText}');
+                              print('setstate ${f.buttonText}');
 
 
-                          });
-                        },
-                      );
-                    }).toList())
-            ),
+                            });
+                          },
+                        );
+                      }).toList())
+              ),
 
-            /* Container(
+              /* Container(
 
               height: 50.h,
               child:   GridView.builder(
@@ -204,62 +206,63 @@ class _GameScreenState extends State<GameScreen> {
               ),
 
             ), */
-            Row(
+              Row(
 
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-              children: <Widget>[
-                Container(
-                  width: 30.w,
-                  height: 5.h,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                children: <Widget>[
+                  Container(
+                    width: 30.w,
+                    height: 5.h,
+                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      child: Text(
+                        'Back',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                        );
+                      },
                     ),
-                    child: Text(
-                      'Back',
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                      );
-                    },
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 4.w),
-                  height: 5.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                  Container(
+                    margin: EdgeInsets.only(right: 4.w),
+                    height: 5.h,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      child: Text(
+                        'Confirm',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                      onPressed: () {
+
+                        if(TicketNumbers.length==5)
+                        {
+
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                            return    TicketConfirm(TNo1: TicketNumbers[0], TNo2: TicketNumbers[1], TNo3: TicketNumbers[2],TNo4: TicketNumbers[3],TNo5: TicketNumbers[4],);
+                          }));
+
+                        }
+                        else{
+                          NumberSelectionAlert(context);
+                        }
+
+                      },
                     ),
-                    child: Text(
-                      'Confirm',
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                    onPressed: () {
-
-                      if(TicketNumbers.length==5)
-                      {
-
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                          return    TicketConfirm(TNo1: TicketNumbers[0], TNo2: TicketNumbers[1], TNo3: TicketNumbers[2],TNo4: TicketNumbers[3],TNo5: TicketNumbers[4],);
-                        }));
-
-                      }
-                      else{
-                        NumberSelectionAlert(context);
-                      }
-
-                    },
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -290,6 +293,7 @@ class _GameScreenState extends State<GameScreen> {
       },
     );
   }
+  
 }
 
 class MyButtonModal {

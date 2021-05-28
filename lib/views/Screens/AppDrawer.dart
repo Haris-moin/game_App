@@ -15,10 +15,8 @@ class AppDrawer extends StatelessWidget {
   async{
     auth_Services_Provider _auth_Provider = Provider.of<auth_Services_Provider>(context, listen: false);
     _auth_Provider.signOut().then((value) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Login()),
-      );
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          Login()), (Route<dynamic> route) => false);
     });
 
   }
@@ -34,10 +32,10 @@ class AppDrawer extends StatelessWidget {
           Positioned(
               bottom: 12.0,
               left: 16.0,
-              child: Text("Profile",
+              child: Text("Bingo",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
+                      color: Colors.black87,
+                      fontSize: 32.0,
                       fontWeight: FontWeight.w500))),
         ],
       ),
@@ -71,9 +69,8 @@ class AppDrawer extends StatelessWidget {
               icon: Icons.home_outlined,
               text: 'Home',
               onTap: () {
-
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Home()));
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                    Home()), (Route<dynamic> route) => false);
               }),
           _createDrawerItem(
               icon: Icons.settings,

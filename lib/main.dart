@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:game_app/Model/Providers/Auth_Password_Edit.dart';
 import 'package:game_app/Model/Providers/auth_services_Provider.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var email =   prefs.getString('email');
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   print(email);
   runApp(
     MultiProvider(
@@ -55,4 +57,11 @@ class MyApp extends StatelessWidget {
         }
     );
   }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
 }
